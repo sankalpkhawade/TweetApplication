@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //         authorizeRequests().
 //         antMatchers(AUTH_WHITELIST).permitAll().
 		httpSecurity.csrf().disable().httpBasic().and().authorizeRequests().antMatchers("/authenticate").permitAll()
-				.antMatchers("/register").permitAll().antMatchers(AUTH_WHITELIST).permitAll().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest()
+				.antMatchers("/register").permitAll().antMatchers("/forgetPassword").permitAll().antMatchers(AUTH_WHITELIST).permitAll().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest()
 				.authenticated().and().addFilter(new JwtAuthorizationFilter(authenticationManager()));
 
 	}
