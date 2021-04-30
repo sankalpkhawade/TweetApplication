@@ -24,66 +24,63 @@ public class TweetController {
 	@Autowired
 	TweetsService tweetsService;
 
-	private final Producer producer;
-	
-	private final Logger logger = LoggerFactory.getLogger(TweetController.class);
-
 	@Autowired
-	TweetController(Producer producer) {
-		this.producer = producer;
-	}
+	Producer producer;
+
+	private final Logger logger = LoggerFactory.getLogger(TweetController.class);
 
 	@GetMapping(value = "/api/v1.0/tweets/all")
 	public TweetResponse getAllTweets() {
 		TweetResponse response = tweetsService.getAllTweets();
-		logger.info("Tweet Controller"+"in get All Tweets() call" + response.getStatusMessage());
+		logger.info("Tweet Controller" + "in get All Tweets() call" + response.getStatusMessage());
 		return response;
 	}
 
 	@GetMapping(value = "/api/v1.0/tweets/{username}")
 	public TweetResponse getAllTweetsUser(@PathVariable("username") String userName) {
 		TweetResponse response = tweetsService.getAllTweetsByUserName(userName);
-		logger.info("Tweet Controller"+"in get All Tweets() call" + response.getStatusMessage());
+		logger.info("Tweet Controller" + "in get All Tweets() call" + response.getStatusMessage());
 		return response;
 
 	}
 
 	@PostMapping(value = "/api/v1.0/tweets/{username}/add")
 	public TweetResponse addTweet(@RequestBody TweetRequest request, @PathVariable("username") String userName) {
-		this.producer.sendMessage(request.getTweet().getTweet());
+		producer.sendMessage(request.getTweet().getTweet());
 		TweetResponse response = tweetsService.addTweet(request, userName);
-		logger.info("Tweet Controller"+"in addTweet() call" + response.getStatusMessage());
+		logger.info("Tweet Controller" + "in addTweet() call" + response.getStatusMessage());
 		return response;
 	}
 
 	@RequestMapping(path = "/api/v1.0/tweets/{username}/delete/{id}", method = RequestMethod.DELETE)
 	public TweetResponse deleteTweet(@PathVariable("username") String userName, @PathVariable("id") Long tweetId) {
 		TweetResponse response = tweetsService.deleteTweet(userName, tweetId);
-		logger.info("Tweet Controller"+"in deleteTweet() call" + response.getStatusMessage());
+		logger.info("Tweet Controller" + "in deleteTweet() call" + response.getStatusMessage());
 		return response;
 
 	}
 
 	@PostMapping(value = "/api/v1.0/tweets/reply")
 	public TweetResponse replyToTweet(@RequestBody TweetRequest request) {
-		this.producer.sendMessage(request.getTweet().getReply().get(0).getReplied());
+		producer.sendMessage(request.getTweet().getReply().get(0).getReplied());
 		TweetResponse response = tweetsService.replyToTweet(request);
-		logger.info("Tweet Controller"+"in replyToTweet() call" + response.getStatusMessage());
+		logger.info("Tweet Controller" + "in replyToTweet() call" + response.getStatusMessage());
 		return response;
 	}
 
 	@RequestMapping(value = "/api/v1.0/tweets/like", method = RequestMethod.POST)
 	public TweetResponse likeATweet(@RequestBody TweetRequest request) {
 		TweetResponse response = tweetsService.likeATweet(request);
-		logger.info("Tweet Controller"+"in likeATweet() call" + response.getStatusMessage());
+		logger.info("Tweet Controller" + "in likeATweet() call" + response.getStatusMessage());
 		return response;
 	}
 
 	@RequestMapping(value = "/api/v1.0/tweets/update", method = RequestMethod.POST)
 	public TweetResponse updateTweet(@RequestBody TweetRequest request) {
-		this.producer.sendMessage(request.getTweet().getTweet());
-		TweetResponse response = tweetsService.updateTweet(request);;
-		logger.info("Tweet Controller"+"in updateTweet() call" + response.getStatusMessage());
+		producer.sendMessage(request.getTweet().getTweet());
+		TweetResponse response = tweetsService.updateTweet(request);
+		;
+		logger.info("Tweet Controller" + "in updateTweet() call" + response.getStatusMessage());
 		return response;
 	}
 
